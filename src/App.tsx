@@ -1,26 +1,30 @@
 import React from 'react'
 import './App.css';
+import {Todolist} from "./Todolist";
+
+export type TaskProps = {
+    title: string,
+    id: number,
+    isDone: boolean
+}
+
+const task1 : TaskProps[] = [
+    {title: 'CSS', id: 1, isDone: true},
+    {title: 'JS', id: 2, isDone: false},
+    {title: 'React', id: 3, isDone: true},
+]
+
+const task2 : Array<TaskProps> = [
+    {title: 'Gucci', id: 1, isDone: false},
+    {title: 'Balenciaga', id: 2, isDone: true},
+    {title: 'Louis Vuitton', id: 3, isDone: true},
+]
 
 function App() {
     return (
         <div className="App">
-            <div>
-                <h3>What to learn</h3>
-                <div>
-                    <input/>
-                    <button>+</button>
-                </div>
-                <ul>
-                    <li><input type="checkbox" checked={true}/> <span>HTML&CSS</span></li>
-                    <li><input type="checkbox" checked={true}/> <span>JS</span></li>
-                    <li><input type="checkbox" checked={false}/> <span>React</span></li>
-                </ul>
-                <div>
-                    <button>All</button>
-                    <button>Active</button>
-                    <button>Completed</button>
-                </div>
-            </div>
+            <Todolist title = 'What to learn' task={task1}/>
+            <Todolist title = 'Style' task={task2}/>
         </div>
     );
 }
