@@ -13,7 +13,7 @@ export const Todolist:React.FC<TodolistPropsType> = (props: TodolistPropsType) =
     const {title, tasks, removeTask, changeFilter, addTask, ...restProps} = props
 
     const tasksList:Array<JSX.Element> = tasks.map((task:TaskType) => {
-        const onClickRemoveTaskHandler = () => {
+        const onClickRemoveTaskHandler = ():void => {
             removeTask(task.id);
         }
         return (
@@ -26,7 +26,7 @@ export const Todolist:React.FC<TodolistPropsType> = (props: TodolistPropsType) =
 
     const [newTask, setNewTask] = useState<string>('');
 
-    const onChangeNewTaskHandler = (event: ChangeEvent<HTMLInputElement>) =>
+    const onChangeNewTaskHandler = (event: ChangeEvent<HTMLInputElement>):void =>
         setNewTask(event.currentTarget.value);
 
     const onClickNewTaskHandler = () => {
@@ -34,23 +34,36 @@ export const Todolist:React.FC<TodolistPropsType> = (props: TodolistPropsType) =
         setNewTask('');
     }
 
-    const onClickEnterHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const onClickEnterHandler = (event: React.KeyboardEvent<HTMLInputElement>):void => {
         if(event.key === 'Enter'){
             addTask(newTask);
             setNewTask('');
         }
     }
 
-    const onClickSetAllFilterHandler = () => {changeFilter('all');}
-    const onClickSetCompletedFilterHandler = () => {changeFilter('completed');}
-    const onClickSetActiveFilterHandler = () => {changeFilter('active');}
+    const noSymbolsHandler:boolean | JSX.Element =
+        !newTask.length && <p style={{color: 'red'}}>You need to write something!</p>
+
+    const tooMuchSymbolsHandler:boolean | JSX.Element =
+        newTask.length > 15 && <p style={{color: 'red'}}>You've wrote too much symbols!</p>
+
+    const disabledCondition:boolean = !newTask.length || newTask.length > 15;
+
+    const onClickSetAllFilterHandler = ():void => {changeFilter('all');}
+    const onClickSetCompletedFilterHandler = ():void => {changeFilter('completed');}
+    const onClickSetActiveFilterHandler = ():void => {changeFilter('active');}
 
     return (
         <div>
             <h3>{title}</h3>
             <div>
-                <input onChange={onChangeNewTaskHandler} onKeyDown={onClickEnterHandler} value={newTask}/>
-                <button onClick={onClickNewTaskHandler}>+</button>
+                <input onChange={onChangeNewTaskHandler}
+                       onKeyDown={onClickEnterHandler}
+                       value={newTask}/>
+                <button disabled={disabledCondition}
+                        onClick={onClickNewTaskHandler}>+</button>
+                {noSymbolsHandler}
+                {tooMuchSymbolsHandler}
             </div>
             <ul>
                 {tasksList}

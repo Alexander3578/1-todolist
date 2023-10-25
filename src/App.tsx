@@ -21,19 +21,19 @@ function App() {
         {title: 'React', id: v1(), isDone: true},
     ])
 
-    const removeTask = (id: string) => {
+    const removeTask = (id: string):void => {
         const tasksAfterRemoving: TaskType[] = tasks.filter((task: TaskType) => task.id !== id)
         setTasks(tasksAfterRemoving)
     }
 
-    const addTask = (newTask: string) => {
+    const addTask = (newTask: string):void => {
         if(newTask)
         setTasks([{title: newTask, id: v1(), isDone: false}, ...tasks])
     }
 
     const [filter, setFilter] = useState<FilterValuesType>('all');
 
-    const changeFilter = (newFilterValue: FilterValuesType) => {
+    const changeFilter = (newFilterValue: FilterValuesType):void => {
         setFilter(newFilterValue);
     }
 
