@@ -27,7 +27,6 @@ function App() {
     }
 
     const addTask = (newTask: string):void => {
-        if(newTask)
         setTasks([{title: newTask, id: v1(), isDone: false}, ...tasks])
     }
 
@@ -37,11 +36,20 @@ function App() {
         setFilter(newFilterValue);
     }
 
-    const filteredTasks: TaskType[] = (filter === 'active' ?
+    const filteredTasks: TaskType[] =
+        (filter === 'active' ?
         tasks.filter((task: TaskType) => !task.isDone) :
         filter === 'completed' ?
         tasks.filter((task: TaskType) => task.isDone) :
         tasks)
+
+    const changeTaskStatus = (id: string, isDone: boolean) => {
+        let task = tasks.find(t => t.id === id)
+        if(task){
+            task.isDone = isDone
+            setTasks([...tasks])
+        }
+    }
 
     return (
         <div className="App">
@@ -49,7 +57,9 @@ function App() {
                       tasks={filteredTasks}
                       removeTask={removeTask}
                       changeFilter={changeFilter}
-                      addTask={addTask}/>
+                      addTask={addTask}
+                      changeTaskStatus = {changeTaskStatus}
+                      filter = {filter}/>
         </div>
     );
 }
