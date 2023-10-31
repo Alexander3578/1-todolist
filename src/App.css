@@ -7,8 +7,9 @@
   margin-right: 50px;
 }
 
-.error {
-  border: red 1px solid;
+.input-error {
+  border: 2px solid red;
+  outline: none;
 }
 
 .error-message{
@@ -16,9 +17,12 @@
 }
 
 .active-filter{
-  background-color: aquamarine;
+  background-color: #7e78d0;
+  color: white;
+  border: 1px solid plum;
 }
 
 .is-done{
-  opacity: .5;
+  opacity: .8;
+  text-decoration: line-through;
 }
