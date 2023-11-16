@@ -1,31 +1,25 @@
 import React, {ChangeEvent, useState} from 'react';
 import {FilterValuesType, TaskType} from './App';
+import {AddItems} from './compomemts/addItems/AddItems';
+import {EditableSpan} from './compomemts/editableSpan/EditableSpan';
 
 type TodolistPropsType = {
     title: string,
     todoId: string
     tasks: Array<TaskType>
-    removeTask: (id: string, todoId: string) => void
-    changeFilter: (newFilterValue: FilterValuesType, todoId: string) => void
-    addTask: (newTask: string, todoId: string) => void
-    changeTaskStatus: (id: string, idDone: boolean, todoId: string) => void
+    removeTask: (todoId: string, id: string) => void
+    changeFilter: (todoId: string, newFilterValue: FilterValuesType) => void
+    addTask: (todoId: string, newTask: string) => void
+    changeTaskStatus: (todoId: string, id: string, idDone: boolean) => void
     filter: FilterValuesType
     removeTodoList: (todoId: string) => void
+    updateTask: (todoId: string, taskId: string, newTaskTitle: string) => void
+    updateTodo: (todoId: string, newTodoTitle: string) => void
 }
 
-export const Todolist: React.FC<TodolistPropsType> = ({
-                                                          title,
-                                                          todoId,
-                                                          tasks,
-                                                          removeTask,
-                                                          changeFilter,
-                                                          addTask,
-                                                          changeTaskStatus,
-                                                          filter,
-                                                          removeTodoList
-                                                      }) => {
-    const [newTask, setNewTask] = useState<string>('');
-    const [error, setError] = useState<boolean>(false);
+export const Todolist: React.FC<TodolistPropsType> = (props) => {
+
+    let {title, todoId, tasks, removeTask, changeFilter, addTask, changeTaskStatus, filter, removeTodoList, updateTask, updateTodo} = props
 
     const filteredTasks: TaskType[] =
         (filter === 'active' ?
@@ -34,51 +28,42 @@ export const Todolist: React.FC<TodolistPropsType> = ({
                 tasks.filter((task: TaskType) => task.isDone) :
                 tasks)
 
-    const onChangeNewTaskHandler = (event: ChangeEvent<HTMLInputElement>): void => {
-        error && setError(false);
-        if (event.currentTarget.value.trim() || event.currentTarget.value === '') {
-            setNewTask(event.currentTarget.value);
-        } else setError(true)
-    }
 
-    const onClickNewTaskHandler = () => {
-        if (newTask.trim()) {
-            addTask(newTask, todoId);
-            setNewTask('');
-        } else setError(true)
-    }
-
-    const onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) =>
-        event.key === 'Enter' && !disabledCondition && onClickNewTaskHandler();
-
-    const onClickSetAllFilterHandler = (): void => changeFilter('all', todoId);
-    const onClickSetCompletedFilterHandler = (): void => changeFilter('completed', todoId);
-    const onClickSetActiveFilterHandler = (): void => changeFilter('active', todoId);
+    const onClickSetAllFilterHandler = (): void => changeFilter(todoId, 'all');
+    const onClickSetCompletedFilterHandler = (): void => changeFilter(todoId, 'completed');
+    const onClickSetActiveFilterHandler = (): void => changeFilter(todoId, 'active');
 
     const onClickRemoveTodoListHandler = () => removeTodoList(todoId);
-    // const noSymbolsHandler:boolean | JSX.Element =
-    // !newTask.trim().length && <p style={{color: 'red'}}>You need to write something!</p>
+    const addTaskHandler = (newTask: string) => {
+        addTask(todoId, newTask);
+    }
 
-    const tooMuchSymbolsHandler: boolean | JSX.Element =
-        newTask.length > 15 && <p style={{color: 'red'}}>You've wrote too much symbols!</p>
+    const updateTodoHandler = (newTitle: string) => {
+        updateTodo(todoId, newTitle)
+    }
 
-    const disabledCondition: boolean = !newTask.trim().length || newTask.length > 15;
+    const updateTaskHandler = (taskId: string, newTitle: string) => {
+            updateTask(todoId, taskId, newTitle);
+        }
 
     const tasksList: Array<JSX.Element> | JSX.Element = tasks.length ?
         <ul>
             {filteredTasks.map((task: TaskType) => {
+                // const updateTaskHandler = (newTitle: string) => {
+                //     updateTask(todoId, task.id, newTitle);
+                // }
                 const onClickRemoveTaskHandler = (): void => {
                     removeTask(task.id, todoId);
                 }
                 const onChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
                     let currentChecked = e.currentTarget.checked;
-                    changeTaskStatus(task.id, currentChecked, todoId);
+                    changeTaskStatus(todoId, task.id, currentChecked);
                 }
                 const taskClass = task.isDone ? 'is-done' : '';
                 return (
                     <li key={task.id} className={taskClass}>
                         <input type="checkbox" checked={task.isDone} onChange={onChangeHandler}/>
-                        <span>{task.title}</span>
+                        <EditableSpan oldTitle={task.title} callBack={(title)=>updateTaskHandler(task.id, title)}/>
                         <button onClick={onClickRemoveTaskHandler}>X</button>
                     </li>
                 )
@@ -89,23 +74,13 @@ export const Todolist: React.FC<TodolistPropsType> = ({
     return (
         <div>
             <h3>
-                {title}
+                <EditableSpan oldTitle={title} callBack={updateTodoHandler}/>
                 <button onClick={onClickRemoveTodoListHandler}>X</button>
             </h3>
-            <div>
-                <input onChange={onChangeNewTaskHandler}
-                       onKeyDown={onKeyDownHandler}
-                       value={newTask}
-                       className={error ? 'input-error' : ''}
-                       placeholder={'Please, start typing...'}/>
-                <button disabled={disabledCondition}
-                        onClick={onClickNewTaskHandler}>
-                    +
-                </button>
-                {error && <p className="error-message">You need to write something!</p>}
-                {tooMuchSymbolsHandler}
-            </div>
+
+            <AddItems callBack={addTaskHandler}/>
             {tasksList}
+
             <div>
                 <button className={filter === 'all' ? 'active-filter' : ''}
                         onClick={onClickSetAllFilterHandler}>All
