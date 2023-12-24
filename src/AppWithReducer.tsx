@@ -1,12 +1,26 @@
-import React, {useState} from 'react'
+import React, {Reducer, useReducer} from 'react'
 import {v1} from 'uuid';
-import './App.css';
-import {Todolist} from './Todolist';
-import {AddItems} from './compomemts/addItems/AddItems';
-import ButtonAppBar from './compomemts/buttonAppBar/ButtonAppBar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    taskReducer
+} from './state/reducers/tasks-reducer';
+import {
+    addTodoListAC,
+    changeTodoListFilterAC,
+    removeTodoListAC,
+    TodoActionType,
+    todolistReducer,
+    updateTodoListAC
+} from './state/reducers/todolists-reducer';
+import {AddItems} from './compomemts/addItems/AddItems';
+import {Todolist} from './Todolist';
+import ButtonAppBar from './compomemts/buttonAppBar/ButtonAppBar';
 
 
 export type TaskType = {
@@ -27,17 +41,17 @@ export type TaskStateType = {
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
-function App() {
+export function AppWithReducer() {
 
     const todoIdOne = v1();
     const todoIdTwo = v1();
 
-    let [todoLists, setTodoLists] = useState<TodoListType[]>([
+    let [todoLists, dispatchTodoLists] = useReducer<Reducer<TodoListType[], TodoActionType>>(todolistReducer,[
         {id: todoIdOne, title: 'What to learn', filter: 'all'},
         {id: todoIdTwo, title: 'What to buy', filter: 'all'}
     ])
 
-    let [tasks, setTasks] = useState<TaskStateType>({
+    let [tasks, dispatchTasks] = useReducer(taskReducer ,{
         [todoIdOne]: [
             {title: 'CSS', id: v1(), isDone: true},
             {title: 'JS', id: v1(), isDone: false},
@@ -54,40 +68,40 @@ function App() {
         ]
     })
 
-    const removeTask = (todoId: string, id: string): void => {
-        setTasks({...tasks, [todoId]: tasks[todoId].filter(task => task.id !== id)});
-    }
+    const removeTask = (todoId: string, id: string): void =>
+        dispatchTasks(removeTaskAC(id, todoId));
 
     const addTask = (todoId: string, newTask: string): void =>
-        setTasks({...tasks, [todoId]: [...tasks[todoId], {title: newTask, id: v1(), isDone: false}]});
+        dispatchTasks(addTaskAC(newTask, todoId))
 
     const changeFilter = (todoId: string, newFilterValue: FilterValuesType): void =>
-        setTodoLists(todoLists.map(todo => todo.id === todoId ? {...todo, filter: newFilterValue} : todo));
+        dispatchTodoLists(changeTodoListFilterAC(todoId, newFilterValue))
 
     const changeTaskStatus = (todoId: string, id: string, isDone: boolean) =>
-        setTasks({...tasks, [todoId]: tasks[todoId].map(task => task.id === id ? {...task, isDone} : task)});
+        dispatchTasks(changeTaskStatusAC(id, isDone, todoId))
 
     const removeTodoList = (todoId: string) => {
-        setTodoLists(todoLists.filter(todo => todo.id !== todoId));
-        delete tasks[todoId]
+        const action = removeTodoListAC(todoId);
+        dispatchTasks(action);
+        dispatchTodoLists(action);
     }
 
     const addTodoList = (todoName: string) => {
-        const todoListId = v1();
-        setTodoLists([{id: todoListId, title: todoName, filter: 'all'}, ...todoLists])
-        setTasks({...tasks, [todoListId]: []})
+        const action = addTodoListAC(todoName);
+        dispatchTodoLists(action);
+        dispatchTasks(action);
     }
 
     const updateTask = (todoId: string, taskId: string, newTaskTitle: string) => {
-        setTasks({...tasks, [todoId]: tasks[todoId].map(t => (t.id === taskId ? {...t, title: newTaskTitle} : t))})
+        dispatchTasks(changeTaskTitleAC(taskId, newTaskTitle, todoId))
     }
 
     const updateTodo = (todoId: string, newTodoTitle: string) => {
-        setTodoLists(todoLists.map(todo => (todo.id === todoId ? {...todo, title: newTodoTitle} : todo)))
+        dispatchTodoLists(updateTodoListAC(todoId, newTodoTitle))
     }
 
     return (
-        <div className="App">
+        <div>
             <ButtonAppBar/>
             <Container fixed>
                 <Grid container style={{padding: '20px'}}>
@@ -117,5 +131,3 @@ function App() {
         </div>
     );
 }
-
-export default App;

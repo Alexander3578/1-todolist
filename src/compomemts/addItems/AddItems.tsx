@@ -1,52 +1,65 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, memo, useState} from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 type AddItemsPropsType = {
     callBack: (newTask: string) => void
 }
 
-export const AddItems:React.FC<AddItemsPropsType> = (props) => {
+export const AddItems: React.FC<AddItemsPropsType> = memo((props:AddItemsPropsType) => {
+        const {callBack} = props
+    debugger;
+        const [newItem, setNewItem] = useState<string>('');
+        const [error, setError] = useState<string | null>(null);
 
-    const {callBack} = props
+        const onChangeNewItemHandler = (event: ChangeEvent<HTMLInputElement>) => {
+            if(error) setError(null);
+            if (event.currentTarget.value.trim() || event.currentTarget.value === '') {
+                setNewItem(event.currentTarget.value);
+            } else setError('Title is required')
+        }
 
-    const [newItem, setNewItem] = useState<string>('');
-    const [error, setError] = useState<boolean>(false);
+        const onClickAddItemHandler = () => {
+            if (newItem.trim()) {
+                callBack(newItem);
+                setNewItem('');
+            } else setError('Title is required!')
+        }
 
-    const onChangeNewTaskHandler = (event: ChangeEvent<HTMLInputElement>): void => {
-        error && setError(false);
-        if (event.currentTarget.value.trim() || event.currentTarget.value === '') {
-            setNewItem(event.currentTarget.value);
-        } else setError(true)
+        const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+            if(error) setError(null);
+            event.key === 'Enter' && !disabledCondition && onClickAddItemHandler();
+        }
+
+        const disabledCondition: boolean = !newItem.trim().length || newItem.length > 15;
+
+        const buttonStyles = {
+            maxWidth: '40px',
+            maxHeight: '40px',
+            minWidth: '40px',
+            minHeight: '40px',
+            backgroundColor: '#7e78d0',
+            color: 'whitesmoke'
+        }
+
+        return (
+            <div>
+                <TextField id="outlined-basic"
+                           label={error ? error : 'Type text here...'}
+                           variant="outlined"
+                           size="small"
+                           onChange={onChangeNewItemHandler}
+                           onKeyDown={onKeyDownHandler}
+                           value={newItem}
+                           error={!!error}/>
+                <Button style={buttonStyles}
+                        variant="contained"
+                        disabled={disabledCondition}
+                        onClick={onClickAddItemHandler}>
+                    +
+                </Button>
+            </div>
+        );
     }
-
-    const onClickAddTaskHandler = () => {
-        if (newItem.trim()) {
-            callBack(newItem);
-            setNewItem('');
-        } else setError(true)
-    }
-
-    const onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) =>
-        event.key === 'Enter' && !disabledCondition && onClickAddTaskHandler();
-
-    const tooMuchSymbolsHandler: boolean | JSX.Element =
-        newItem.length > 15 && <p style={{color: 'red'}}>You've wrote too much symbols!</p>
-
-    const disabledCondition: boolean = !newItem.trim().length || newItem.length > 15;
-
-    return (
-        <div>
-            <input onChange={onChangeNewTaskHandler}
-                   onKeyDown={onKeyDownHandler}
-                   value={newItem}
-                   className={error ? 'input-error' : ''}
-                   placeholder={'Please, start typing...'}/>
-            <button disabled={disabledCondition}
-                    onClick={onClickAddTaskHandler}>
-                +
-            </button>
-            {error && <p className="error-message">You need to write something!</p>}
-            {tooMuchSymbolsHandler}
-        </div>
-    );
-};
+);
 

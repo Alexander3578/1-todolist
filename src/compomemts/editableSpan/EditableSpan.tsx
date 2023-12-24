@@ -5,33 +5,34 @@ type EditableSpanPropsType = {
     callBack: (title: string) => void
 }
 
-export const EditableSpan: React.FC<EditableSpanPropsType> = (props) => {
+export const EditableSpan: React.FC<EditableSpanPropsType> = React.memo((props) => {
 
-    const {oldTitle, callBack} = props;
+        const {oldTitle, callBack} = props;
 
-    const [edit, setEdit] = useState(false);
-    const [changeTitle, setChangeTitle] = useState<string>(oldTitle);
+        const [edit, setEdit] = useState(false);
+        const [changeTitle, setChangeTitle] = useState<string>(oldTitle);
 
 
-    const onDoubleClickEditHandler = () => setEdit(true)
-    const onBlurEditHandler = () => {
-        setEdit(false)
-        callBack(changeTitle)
+        const onDoubleClickEditHandler = () => setEdit(true)
+        const onBlurEditHandler = () => {
+            setEdit(false)
+            callBack(changeTitle)
+        }
+        const onChangeTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+            setChangeTitle(e.currentTarget.value)
+        }
+
+        return (
+            edit
+                ?
+                <input value={changeTitle}
+                       onBlur={onBlurEditHandler}
+                       onChange={onChangeTitleHandler}
+                       autoFocus>
+                </input>
+                :
+                <span onDoubleClick={onDoubleClickEditHandler}>{oldTitle}</span>
+        );
     }
-    const onChangeTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setChangeTitle(e.currentTarget.value)
-    }
-
-    return (
-        edit
-            ?
-            <input value={changeTitle}
-                   onBlur={onBlurEditHandler}
-                   onChange={onChangeTitleHandler}
-                   autoFocus>
-            </input>
-            :
-            <span onDoubleClick={onDoubleClickEditHandler}>{oldTitle}</span>
-    );
-};
+)
 

@@ -1,7 +1,11 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterValuesType, TaskType} from './App';
 import {AddItems} from './compomemts/addItems/AddItems';
 import {EditableSpan} from './compomemts/editableSpan/EditableSpan';
+import IconButton from '@mui/material/IconButton';
+import Delete from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+import {UniversalCheckbox} from './compomemts/checkbox/Checkbox';
 
 type TodolistPropsType = {
     title: string,
@@ -46,6 +50,10 @@ export const Todolist: React.FC<TodolistPropsType> = (props) => {
             updateTask(todoId, taskId, newTitle);
         }
 
+    const onChangeHandler = (taskId: string, currentChecked: boolean): void => {
+        changeTaskStatus(todoId, taskId, currentChecked);
+    }
+
     const tasksList: Array<JSX.Element> | JSX.Element = tasks.length ?
         <ul>
             {filteredTasks.map((task: TaskType) => {
@@ -53,18 +61,18 @@ export const Todolist: React.FC<TodolistPropsType> = (props) => {
                 //     updateTask(todoId, task.id, newTitle);
                 // }
                 const onClickRemoveTaskHandler = (): void => {
-                    removeTask(task.id, todoId);
-                }
-                const onChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
-                    let currentChecked = e.currentTarget.checked;
-                    changeTaskStatus(todoId, task.id, currentChecked);
+                    removeTask(todoId, task.id);
                 }
                 const taskClass = task.isDone ? 'is-done' : '';
                 return (
                     <li key={task.id} className={taskClass}>
-                        <input type="checkbox" checked={task.isDone} onChange={onChangeHandler}/>
+                        <UniversalCheckbox isDone={task.isDone} callback = {(currentChecked) => onChangeHandler(task.id, currentChecked)}/>
                         <EditableSpan oldTitle={task.title} callBack={(title)=>updateTaskHandler(task.id, title)}/>
-                        <button onClick={onClickRemoveTaskHandler}>X</button>
+                        <IconButton onClick={onClickRemoveTaskHandler}
+                                    aria-label="delete"
+                                    size="small">
+                            <Delete fontSize="inherit" />
+                        </IconButton>
                     </li>
                 )
             })}
@@ -75,22 +83,32 @@ export const Todolist: React.FC<TodolistPropsType> = (props) => {
         <div>
             <h3>
                 <EditableSpan oldTitle={title} callBack={updateTodoHandler}/>
-                <button onClick={onClickRemoveTodoListHandler}>X</button>
+                <IconButton onClick={onClickRemoveTodoListHandler}
+                            aria-label="delete"
+                            size="medium">
+                    <Delete fontSize="inherit" />
+                </IconButton>
             </h3>
 
             <AddItems callBack={addTaskHandler}/>
             {tasksList}
 
             <div>
-                <button className={filter === 'all' ? 'active-filter' : ''}
-                        onClick={onClickSetAllFilterHandler}>All
-                </button>
-                <button className={filter === 'active' ? 'active-filter' : ''}
-                        onClick={onClickSetActiveFilterHandler}>Active
-                </button>
-                <button className={filter === 'completed' ? 'active-filter' : ''}
-                        onClick={onClickSetCompletedFilterHandler}>Completed
-                </button>
+                <Button variant={ filter === 'all' ? "contained" : "outlined"}
+                        color='primary'
+                        onClick={onClickSetAllFilterHandler}>
+                    All
+                </Button>
+                <Button variant={ filter === 'active' ? "contained" : "outlined"}
+                        color='secondary'
+                        onClick={onClickSetActiveFilterHandler}>
+                    Active
+                </Button>
+                <Button variant={ filter === 'completed' ? "contained" : "outlined"}
+                        color='error'
+                        onClick={onClickSetCompletedFilterHandler}>
+                    Completed
+                </Button>
             </div>
         </div>
     );
