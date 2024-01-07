@@ -1,9 +1,9 @@
 import React, {useCallback} from 'react';
-import {UniversalCheckbox} from '../compomemts/checkbox/Checkbox';
-import {EditableSpan} from '../compomemts/editableSpan/EditableSpan';
+import {UniversalCheckbox} from '../checkbox/Checkbox';
+import {EditableSpan} from '../editableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import Delete from '@mui/icons-material/Delete';
-import {TaskType} from '../AppWithRedux';
+import {TaskType} from '../../AppWithRedux';
 
 type TaskPropsType = {
     task: TaskType

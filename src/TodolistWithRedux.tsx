@@ -4,15 +4,13 @@ import {AddItems} from './compomemts/addItems/AddItems';
 import {EditableSpan} from './compomemts/editableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import Delete from '@mui/icons-material/Delete';
-import Button from '@mui/material/Button';
-import {UniversalCheckbox} from './compomemts/checkbox/Checkbox';
 import {TodoListType} from './AppWithRedux';
 import {useDispatch, useSelector} from 'react-redux';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './state/reducers/tasks-reducer';
 import {changeTodoListFilterAC, removeTodoListAC, updateTodoListAC} from './state/reducers/todolists-reducer';
 import {tasksSelector} from './state/selectors';
 import {FilterButton} from './compomemts/filterButton/FilterButton';
-import {Task} from './state/Task';
+import {Task} from './compomemts/task/Task';
 
 type TodolistPropsType = {
     todoList: TodoListType

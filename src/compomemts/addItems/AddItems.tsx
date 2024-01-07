@@ -28,10 +28,10 @@ export const AddItems: React.FC<AddItemsPropsType> = memo((props:AddItemsPropsTy
 
         const onKeyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
             if(error) setError(null);
-            event.key === 'Enter' && !disabledCondition && onClickAddItemHandler();
+            event.key === 'Enter' && /*!disabledCondition &&*/ onClickAddItemHandler();
         }
 
-        const disabledCondition: boolean = !newItem.trim().length || newItem.length > 15;
+        // const disabledCondition: boolean = !newItem.trim().length || newItem.length > 15;
 
         const buttonStyles = {
             maxWidth: '40px',
@@ -54,7 +54,7 @@ export const AddItems: React.FC<AddItemsPropsType> = memo((props:AddItemsPropsTy
                            error={!!error}/>
                 <Button style={buttonStyles}
                         variant="contained"
-                        disabled={disabledCondition}
+                        // disabled={disabledCondition}
                         onClick={onClickAddItemHandler}>
                     +
                 </Button>
