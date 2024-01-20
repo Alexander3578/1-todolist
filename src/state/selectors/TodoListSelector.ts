@@ -1,7 +1,6 @@
-import React from 'react';
 import {AppRootStateType} from '../store';
-import {TodoListType} from '../../AppWithRedux';
+import {TodolistType} from '../../api/todolists-api/todolists-api';
 
-export const todoListSelector = (state: AppRootStateType):TodoListType[] => state.todoList
+export const todoListSelector = (state: AppRootStateType):TodolistType[] => state.todoList
 
 

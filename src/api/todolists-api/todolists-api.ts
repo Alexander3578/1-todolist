@@ -8,28 +8,37 @@ const instance = axios.create({
     }
 })
 
-export type TodolistType = {
+//TYPES
+
+export type FilterValuesType = 'all' | 'active' | 'completed';
+
+export type TodolistResponseType = {
     id: string
-    addedDate: Date
+    addedDate: string
     order: number
     title: string
 }
 
-export type ResponseType<T = {}> = {
-    data: T
+export type TodolistType = TodolistResponseType & {
+    filter: FilterValuesType
+}
+
+export type ResponseType<D = {}> = {
+    data: D
     messages: string[];
     fieldsErrors: string[];
     resultCode: number;
+    // addedDate: string
 }
 
 export const todolistsApi = {
 
     getTodoApi: () => {
-        return instance.get<TodolistType[]>('/todo-lists');
+        return instance.get<TodolistResponseType[]>('/todo-lists');
     },
 
     createTodoApi: (todoTitle: string) => {
-        return instance.post<ResponseType<{ item: TodolistType }>>('/todo-lists', {title: todoTitle});
+        return instance.post<ResponseType<{ item: TodolistResponseType }>>('/todo-lists', {title: todoTitle});
     },
 
     deleteTodoApi: (todoId: string) => {

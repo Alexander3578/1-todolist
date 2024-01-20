@@ -8,7 +8,6 @@ type AddItemsPropsType = {
 
 export const AddItems: React.FC<AddItemsPropsType> = memo((props:AddItemsPropsType) => {
         const {callBack} = props
-    debugger;
         const [newItem, setNewItem] = useState<string>('');
         const [error, setError] = useState<string | null>(null);
 

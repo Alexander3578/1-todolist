@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import { tasksApi } from '../../api/tasks-api/tasks-api';
+import {tasksApi} from '../api/tasks-api/tasks-api';
 
 export default {
     title: 'API/TASK API'
 }
-
 
 export const GetTasks = () => {
     const [state, setState] = useState<any>(null)
@@ -44,7 +43,7 @@ export const UpdateTask = () => {
     const [state, setState] = useState<any>(null)
     useEffect(() => {
         tasksApi.updateTaskApi('b3f33266-dfc5-461a-bd64-f66d58a158e5',
-            '3207c195-20c3-47d3-9e67-0be9da5b4b64', 'Task 2')
+            '3207c195-20c3-47d3-9e67-0be9da5b4b64', {title: 'Task 2'})
             .then(response => {
                 setState(response.data)
             })

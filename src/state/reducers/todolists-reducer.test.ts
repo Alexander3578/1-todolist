@@ -6,14 +6,14 @@ import {
     todolistReducer,
     updateTodoListAC
 } from './todolists-reducer';
-import {TodoListType} from '../../App';
+import {TodolistType} from '../../api/todolists-api/todolists-api';
 
 let todoListId1 = v1();
 let todoListId2 = v1();
 
-let startState:TodoListType[] = [
-    {id: todoListId1, title: 'What to learn', filter: 'all'},
-    {id: todoListId2, title: 'What to buy', filter: 'all'}
+let startState:TodolistType[] = [
+    {id: todoListId1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
+    {id: todoListId2, title: 'What to buy', filter: 'all', addedDate: '', order: 0}
 ]
 
 beforeEach(() => {
@@ -21,8 +21,8 @@ beforeEach(() => {
     todoListId2 = v1();
 
     startState = [
-        {id: todoListId1, title: 'What to learn', filter: 'all'},
-        {id: todoListId2, title: 'What to buy', filter: 'all'}
+        {id: todoListId1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
+        {id: todoListId2, title: 'What to buy', filter: 'all', addedDate: '', order: 0}
     ]
 
 })
@@ -37,7 +37,8 @@ test('correct todoList should be removed', () => {
 
 test('todoList should be add', () => {
 
-    const endState = todolistReducer(startState, addTodoListAC('What to sale'))
+    const todoId = v1();
+    const endState = todolistReducer(startState, addTodoListAC( {id: todoId, title: 'What to sale', filter: 'all', addedDate: '', order: 0}));
 
     expect(endState.length).toBe(3);
     expect(endState[0].title).toBe('What to sale');
