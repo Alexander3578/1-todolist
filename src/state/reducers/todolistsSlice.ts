@@ -59,12 +59,10 @@ const slice = createSlice({
 export const getTodoLists = createAppAsyncThunk<{
   todos: TodolistResponseType[];
 }>(`${slice.name}/getTodoLists`, async (arg, thunkAPI) => {
-  const { dispatch, rejectWithValue } = thunkAPI;
-
-  dispatch(appActions.setAppStatus({ status: "loading" }));
-  const response = await api.todolistsApi.getTodoApi();
-  dispatch(appActions.setAppStatus({ status: "succeeded" }));
-  return { todos: response.data };
+  return thunkTryCatch(thunkAPI, async () => {
+    const response = await api.todolistsApi.getTodoApi();
+    return { todos: response.data };
+  });
 });
 
 export const removeTodoList = createAppAsyncThunk<{ todoId: string }, string>(
@@ -76,8 +74,13 @@ export const removeTodoList = createAppAsyncThunk<{ todoId: string }, string>(
     dispatch(todolistActions.updateTodoEntityStatus({ entityStatus: "loading", todoId }));
     try {
       const response = await api.todolistsApi.deleteTodoApi(todoId);
-      dispatch(appActions.setAppStatus({ status: "succeeded" }));
-      return { todoId: todoId };
+      if (response.data.resultCode === ResultCode.SUCCEEDED) {
+        dispatch(appActions.setAppStatus({ status: "succeeded" }));
+        return { todoId: todoId };
+      } else {
+        handleServerAppError(dispatch, response.data);
+        return rejectWithValue(null);
+      }
     } catch (err) {
       dispatch(todolistActions.updateTodoEntityStatus({ entityStatus: "failed", todoId }));
       dispatch(appActions.setAppStatus({ status: "failed" }));

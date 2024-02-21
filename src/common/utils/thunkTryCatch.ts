@@ -3,6 +3,7 @@ import { handleServerNetworkError } from "common/utils/errorUtils/handleServerNe
 import { BaseThunkAPI } from "@reduxjs/toolkit/dist/createAsyncThunk";
 import { AppDispatchType, AppRootStateType } from "state/store";
 import { BaseResponseType } from "common/api/todolists-api/todolists-api";
+import { todolistActions } from "state/reducers/todolistsSlice";
 
 /**
  * Обертка для выполнения асинхронных операций с блоком try-catch.
@@ -15,7 +16,7 @@ export const thunkTryCatch = async <T>(
   thunkAPI: BaseThunkAPI<AppRootStateType, unknown, AppDispatchType, null | BaseResponseType>,
   logic: () => Promise<T>,
 ): Promise<T | ReturnType<typeof thunkAPI.rejectWithValue>> => {
-  const { dispatch, rejectWithValue } = thunkAPI;
+  const { dispatch, rejectWithValue, getState } = thunkAPI;
 
   dispatch(appActions.setAppStatus({ status: "loading" }));
   try {
