@@ -1,6 +1,4 @@
-import {AppRootStateType} from '../store';
-import {TodolistType} from '../../api/todolists-api/todolists-api';
+import { AppRootStateType } from "../store";
+import { TodolistType } from "common/api/todolists-api/todolists-api";
 
-export const todoListSelector = (state: AppRootStateType):TodolistType[] => state.todoList
-
-
+export const todoListSelector = (state: AppRootStateType): TodolistType[] => state.todoList;

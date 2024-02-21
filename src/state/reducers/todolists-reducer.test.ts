@@ -1,61 +1,106 @@
-import {v1} from 'uuid';
-import {
-    addTodoListAC,
-    changeTodoListFilterAC,
-    removeTodoListAC,
-    todolistReducer,
-    updateTodoListAC
-} from './todolists-reducer';
-import {TodolistType} from '../../api/todolists-api/todolists-api';
+import { v1 } from "uuid";
+import { todolistActions, todolistReducer, todolistThunk } from "state/reducers/todolistsSlice";
+import { TodolistType } from "common/api/todolists-api/todolists-api";
 
 let todoListId1 = v1();
 let todoListId2 = v1();
 
-let startState:TodolistType[] = [
-    {id: todoListId1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
-    {id: todoListId2, title: 'What to buy', filter: 'all', addedDate: '', order: 0}
-]
+let startState: TodolistType[] = [
+  {
+    id: todoListId1,
+    title: "What to learn",
+    filter: "all",
+    addedDate: "",
+    order: 0,
+    entityStatus: "idle",
+  },
+  {
+    id: todoListId2,
+    title: "What to buy",
+    filter: "all",
+    addedDate: "",
+    order: 0,
+    entityStatus: "idle",
+  },
+];
 
 beforeEach(() => {
-    todoListId1 = v1();
-    todoListId2 = v1();
+  todoListId1 = v1();
+  todoListId2 = v1();
 
-    startState = [
-        {id: todoListId1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
-        {id: todoListId2, title: 'What to buy', filter: 'all', addedDate: '', order: 0}
-    ]
+  startState = [
+    {
+      id: todoListId1,
+      title: "What to learn",
+      filter: "all",
+      addedDate: "",
+      order: 0,
+      entityStatus: "idle",
+    },
+    {
+      id: todoListId2,
+      title: "What to buy",
+      filter: "all",
+      addedDate: "",
+      order: 0,
+      entityStatus: "idle",
+    },
+  ];
+});
 
-})
+test("correct todoList should be removed", () => {
+  const endState = todolistReducer(
+    startState,
+    todolistThunk.removeTodoList.fulfilled({ todoId: todoListId1 }, "requestId", todoListId1),
+  );
 
-test('correct todoList should be removed', () => {
+  expect(endState.length).toBe(1);
+  expect(endState[0].id).toBe(todoListId2);
+});
 
-    const endState = todolistReducer(startState, removeTodoListAC(todoListId1))
+test("todoList should be add", () => {
+  const todoId = v1();
+  const endState = todolistReducer(
+    startState,
+    todolistThunk.addTodoList.fulfilled(
+      {
+        todolist: { id: todoId, title: "What to sale", addedDate: "", order: 0 },
+      },
+      "requestId",
+      todoId,
+    ),
+  );
 
-    expect(endState.length).toBe(1);
-    expect(endState[0].id).toBe(todoListId2);
-})
+  expect(endState.length).toBe(3);
+  expect(endState[0].title).toBe("What to sale");
+});
 
-test('todoList should be add', () => {
+test("correct todoList should be updated", () => {
+  const endState = todolistReducer(
+    startState,
+    todolistThunk.changeTodoListTitle.fulfilled(
+      {
+        todoId: todoListId1,
+        newTodoTitle: "Updated",
+      },
+      "requestId",
+      { title: "Updated", todoId: todoListId1 },
+    ),
+  );
 
-    const todoId = v1();
-    const endState = todolistReducer(startState, addTodoListAC( {id: todoId, title: 'What to sale', filter: 'all', addedDate: '', order: 0}));
+  expect(endState.length).toBe(2);
+  expect(endState[0].title).toBe("Updated");
+});
 
-    expect(endState.length).toBe(3);
-    expect(endState[0].title).toBe('What to sale');
-})
+test("change todoList filter", () => {
+  const endState = todolistReducer(
+    startState,
+    todolistActions.changeTodoListFilter({
+      todoId: todoListId2,
+      newFilterValue: "active",
+    }),
+  );
 
-test('correct todoList should be updated', () => {
-
-    const endState = todolistReducer(startState, updateTodoListAC(todoListId1, 'Updated'))
-
-    expect(endState.length).toBe(2);
-    expect(endState[0].title).toBe('Updated');
-})
-
-test('change todoList filter', () => {
-
-    const endState = todolistReducer(startState, changeTodoListFilterAC(todoListId2, 'active'))
-
-    expect(endState.length).toBe(2);
-    expect(endState[1].filter).toBe('active');
-})
+  expect(endState.length).toBe(2);
+  expect(endState[1].filter).toBe("active");
+});
