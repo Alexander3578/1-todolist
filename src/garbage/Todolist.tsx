@@ -5,8 +5,8 @@ import IconButton from "@mui/material/IconButton";
 import Delete from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import { UniversalCheckbox } from "common/components/checkbox/Checkbox";
-import { TaskStatuses, TaskType } from "common/api/tasks-api/tasks-api";
-import { FilterValuesType } from "common/api/todolists-api/todolists-api";
+import { TaskStatuses, TaskType } from "features/todolistsList/api/tasks-api/tasksApi.types";
+import { FilterValuesType } from "features/todolistsList/api/todolists-api/todolistsApi.types";
 
 type TodolistPropsType = {
   title: string;
@@ -49,7 +49,7 @@ export const Todolist: React.FC<TodolistPropsType> = (props) => {
   const onClickSetActiveFilterHandler = (): void => changeFilter(todoId, "active");
 
   const onClickRemoveTodoListHandler = () => removeTodoList(todoId);
-  const addTaskHandler = (newTask: string) => {
+  const addTaskHandler = async (newTask: string) => {
     addTask(todoId, newTask);
   };
 

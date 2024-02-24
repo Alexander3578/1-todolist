@@ -1,14 +1,14 @@
 import React, { ChangeEvent, DetailedHTMLProps, InputHTMLAttributes } from "react";
 import Checkbox from "@mui/material/Checkbox";
-import { TaskStatuses } from "common/api/tasks-api/tasks-api";
+import { TaskStatuses } from "features/todolistsList/api/tasks-api/tasksApi.types";
 
-type DefaultInputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-type CheckboxInputPropsType = DefaultInputPropsType & {
+type DefaultInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+type Props = DefaultInputProps & {
   callback: (currentChecked: boolean) => void;
   status: TaskStatuses;
 };
 
-export const UniversalCheckbox: React.FC<CheckboxInputPropsType> = ({ callback, status }) => {
+export const UniversalCheckbox: React.FC<Props> = ({ callback, status }) => {
   const onChangeChecked = (e: ChangeEvent<HTMLInputElement>) => {
     callback(e.currentTarget.checked);
   };

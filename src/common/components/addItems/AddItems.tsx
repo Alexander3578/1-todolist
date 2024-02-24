@@ -1,14 +1,14 @@
 import React, { ChangeEvent, memo, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { BaseResponseType } from "features/todolistsList/api/todolists-api/todolists-api";
 
-type AddItemsPropsType = {
-  callBack: (newTask: string) => void;
+type Props = {
+  callBack: (newTask: string) => Promise<any>;
   disabledMoment?: boolean;
 };
 
-export const AddItems: React.FC<AddItemsPropsType> = memo((props: AddItemsPropsType) => {
-  const { callBack, disabledMoment } = props;
+export const AddItems: React.FC<Props> = memo(({ disabledMoment, callBack }: Props) => {
   const [newItem, setNewItem] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
@@ -21,8 +21,13 @@ export const AddItems: React.FC<AddItemsPropsType> = memo((props: AddItemsPropsT
 
   const onClickAddItemHandler = () => {
     if (newItem.trim()) {
-      callBack(newItem);
-      setNewItem("");
+      callBack(newItem)
+        .then(() => {
+          setNewItem("");
+        })
+        .catch((err: BaseResponseType) => {
+          if (err.messages) setError(err.messages[0]);
+        });
     } else setError("Title is required!");
   };
 

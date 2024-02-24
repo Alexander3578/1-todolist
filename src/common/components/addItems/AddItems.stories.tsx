@@ -26,10 +26,10 @@ type Story = StoryObj<typeof AddItems>;
 
 export const AddItemsStory: Story = {
   args: {
-    callBack: action("Button click inside form"),
+    callBack: () => new Promise(action("Button click inside form")),
   },
 };
 
 export const AddItemsSecondStory: Story = {
-  render: () => <AddItems callBack={action("Button click inside form")} />,
+  render: () => <AddItems callBack={() => new Promise(action("Button click inside form"))} />,
 };

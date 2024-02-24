@@ -1,5 +1,5 @@
-import { appActions } from "state/reducers/appSlice";
-import { AppDispatchType } from "state/store";
+import { appActions } from "app/appSlice";
+import { AppDispatchType } from "app/store";
 import axios from "axios";
 
 /**

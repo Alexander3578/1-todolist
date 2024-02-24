@@ -1,20 +1,15 @@
 import React, { useEffect } from "react";
 import Container from "@mui/material/Container";
 import ButtonAppBar from "../common/components/buttonAppBar/ButtonAppBar";
-import { TaskType } from "common/api/tasks-api/tasks-api";
 import { useAppDispatch, useAppSelector } from "common/hooks/hooks";
-import { TodoListsList } from "features/todolistsList/TodoListLists";
+import { TodoListsList } from "features/todolistsList/ui/TodoListLists";
 import LinearProgress from "@mui/material/LinearProgress";
 import CustomizedSnackbars from "../common/components/errorSnackbar/ErrorSanckbar";
-import { Login } from "features/login/Login";
+import { Login } from "features/login/ui/Login";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { authThunk } from "state/reducers/authSlice";
+import { authThunk } from "features/login/model/authSlice";
 import { CircularProgress } from "@mui/material";
-import { isInizialisedSelector, statusSelector } from "state/selectors/AppSelectors";
-
-export type TaskStateType = {
-  [key: string]: TaskType[];
-};
+import { isInizialisedSelector, statusSelector } from "app/AppSelectors";
 
 export function AppWithRedux() {
   const dispatch = useAppDispatch();

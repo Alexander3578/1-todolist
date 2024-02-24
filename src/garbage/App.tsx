@@ -7,12 +7,10 @@ import ButtonAppBar from "../common/components/buttonAppBar/ButtonAppBar";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import { TaskPriorities, TaskStatuses, TaskType } from "common/api/tasks-api/tasks-api";
-import { FilterValuesType, TodolistType } from "common/api/todolists-api/todolists-api";
+import { TaskStateType } from "features/todolistsList/model/tasks/tasksSlice";
+import { FilterValuesType, TodolistType } from "features/todolistsList/api/todolists-api/todolistsApi.types";
+import { TaskPriorities, TaskStatuses } from "features/todolistsList/api/tasks-api/tasksApi.types";
 
-export type TaskStateType = {
-  [key: string]: TaskType[];
-};
 function App() {
   const todoIdOne = v1();
   const todoIdTwo = v1();
@@ -201,7 +199,7 @@ function App() {
     delete tasks[todoId];
   };
 
-  const addTodoList = (todoName: string) => {
+  const addTodoList = async (todoName: string) => {
     const todoListId = v1();
     setTodoLists([
       {

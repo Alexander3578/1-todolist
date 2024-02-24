@@ -1,6 +1,6 @@
-import { AppDispatchType } from "state/store";
-import { appActions } from "state/reducers/appSlice";
-import { BaseResponseType } from "common/api/todolists-api/todolists-api";
+import { AppDispatchType } from "app/store";
+import { appActions } from "app/appSlice";
+import { BaseResponseType } from "features/todolistsList/api/todolists-api/todolists-api";
 
 /**
  * Обработчик ошибок с сервера приложения.

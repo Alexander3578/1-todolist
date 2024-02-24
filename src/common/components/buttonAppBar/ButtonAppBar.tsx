@@ -7,8 +7,8 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAppDispatch, useAppSelector } from "common/hooks/hooks";
-import { isLoggedSelector } from "state/selectors/AuthSelectors";
-import { authThunk } from "state/reducers/authSlice";
+import { isLoggedSelector } from "features/login/model/AuthSelectors";
+import { authThunk } from "features/login/model/authSlice";
 
 export default function ButtonAppBar() {
   const isLogged = useAppSelector<boolean>(isLoggedSelector);

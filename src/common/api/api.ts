@@ -1,6 +1,6 @@
-import { AuthApi } from "common/api/auth-api/auth-api";
-import { TasksApi } from "common/api/tasks-api/tasks-api";
-import { TodolistsApi } from "common/api/todolists-api/todolists-api";
+import { AuthApi } from "features/login/api/auth-api/auth-api";
+import { TasksApi } from "features/todolistsList/api/tasks-api/tasks-api";
+import { TodolistsApi } from "features/todolistsList/api/todolists-api/todolists-api";
 import axios from "axios";
 
 const instance = axios.create({
