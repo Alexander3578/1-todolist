@@ -9,10 +9,13 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useAppDispatch, useAppSelector } from "common/hooks/hooks";
 import { isLoggedSelector } from "features/login/model/AuthSelectors";
 import { authThunk } from "features/login/model/authSlice";
+import { statusSelector } from "app/AppSelectors";
+import LinearProgress from "@mui/material/LinearProgress";
 
 export default function ButtonAppBar() {
   const isLogged = useAppSelector<boolean>(isLoggedSelector);
   const dispatch = useAppDispatch();
+  const status = useAppSelector(statusSelector);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -31,6 +34,7 @@ export default function ButtonAppBar() {
           )}
         </Toolbar>
       </AppBar>
+      {status === "loading" && <LinearProgress />}
     </Box>
   );
 }

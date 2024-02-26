@@ -1,7 +1,7 @@
+import axios from "axios";
 import { AuthApi } from "features/login/api/auth-api/auth-api";
 import { TasksApi } from "features/todolistsList/api/tasks-api/tasks-api";
 import { TodolistsApi } from "features/todolistsList/api/todolists-api/todolists-api";
-import axios from "axios";
 
 const instance = axios.create({
   baseURL: "https://social-network.samuraijs.com/api/1.1",

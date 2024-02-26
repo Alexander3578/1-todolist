@@ -1,19 +1,14 @@
 import React, { useEffect } from "react";
-import Container from "@mui/material/Container";
 import ButtonAppBar from "../common/components/buttonAppBar/ButtonAppBar";
 import { useAppDispatch, useAppSelector } from "common/hooks/hooks";
-import { TodoListsList } from "features/todolistsList/ui/TodoListLists";
-import LinearProgress from "@mui/material/LinearProgress";
 import CustomizedSnackbars from "../common/components/errorSnackbar/ErrorSanckbar";
-import { Login } from "features/login/ui/Login";
-import { Navigate, Route, Routes } from "react-router-dom";
 import { authThunk } from "features/login/model/authSlice";
 import { CircularProgress } from "@mui/material";
-import { isInizialisedSelector, statusSelector } from "app/AppSelectors";
+import { isInizialisedSelector } from "app/AppSelectors";
+import { AppRouteContainer } from "app/AppRouteContainer";
 
 export function AppWithRedux() {
   const dispatch = useAppDispatch();
-  const status = useAppSelector(statusSelector);
   const isInizialised = useAppSelector(isInizialisedSelector);
 
   useEffect(() => {
@@ -24,16 +19,7 @@ export function AppWithRedux() {
     <div>
       <CustomizedSnackbars />
       <ButtonAppBar />
-      {status === "loading" && <LinearProgress />}
-
-      <Container fixed>
-        <Routes>
-          <Route path={"/"} element={<TodoListsList />} />
-          <Route path={"/login"} element={<Login />} />
-          <Route path={"/404"} element={<h1>404. Page not found</h1>} />
-          <Route path={"/*"} element={<Navigate to={"/403"} />} />
-        </Routes>
-      </Container>
+      <AppRouteContainer />
     </div>
   ) : (
     <div
