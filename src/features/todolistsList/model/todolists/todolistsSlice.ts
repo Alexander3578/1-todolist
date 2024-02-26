@@ -111,7 +111,7 @@ export const changeTodoListTitle = createAppAsyncThunk<
     return { todoId: arg.todoId, newTodoTitle: arg.title };
   } else {
     // handleServerAppError(dispatch, response.data);
-    return rejectWithValue(null);
+    return rejectWithValue(response.data);
   }
 });
 
