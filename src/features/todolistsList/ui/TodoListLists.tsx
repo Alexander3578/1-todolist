@@ -16,7 +16,7 @@ export const TodoListsList: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (isLogged) dispatch(todolistThunk.getTodoLists());
+    if (isLogged && !todoLists.length) dispatch(todolistThunk.getTodoLists());
   }, []);
 
   const addTodoListHandler = useCallback(

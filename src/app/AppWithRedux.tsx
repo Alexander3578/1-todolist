@@ -6,13 +6,14 @@ import { authThunk } from "features/login/model/authSlice";
 import { CircularProgress } from "@mui/material";
 import { isInizialisedSelector } from "app/AppSelectors";
 import { AppRouteContainer } from "app/AppRouteContainer";
+import { hot } from "react-hot-loader";
 
-export function AppWithRedux() {
+function AppWithRedux() {
   const dispatch = useAppDispatch();
   const isInizialised = useAppSelector(isInizialisedSelector);
 
   useEffect(() => {
-    dispatch(authThunk.authMe());
+    if (!isInizialised) dispatch(authThunk.authMe());
   }, []);
 
   return isInizialised ? (
@@ -34,3 +35,5 @@ export function AppWithRedux() {
     </div>
   );
 }
+
+export default hot(module)(AppWithRedux);

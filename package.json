@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "homepage": "https://Alexander3578.github.io/1-todolist",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -20,8 +21,10 @@
     "@types/uuid": "^9.0.6",
     "axios": "^1.6.5",
     "formik": "^2.4.5",
+    "gh-pages": "^6.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-loader": "^4.13.1",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
@@ -32,10 +35,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "GENERATE-SOURCEMAP=false react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 9009",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build",
     "build-storybook": "storybook build",
     "jest:integration": "jest -c integration/jest.config.js",
     "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration",
@@ -79,6 +84,7 @@
     "puppeteer": "^21.6.1",
     "start-server-and-test": "^2.0.3",
     "storybook": "7.6.6",
-    "webpack": "5.89.0"
+    "webpack": "5.89.0",
+    "webpack-dev-server": "^5.0.2"
   }
 }
